@@ -37,5 +37,38 @@ class LLMClient:
         self.session.add_assistant_message(answer)
         return answer
 
+
+    def stream_chat(self, user_message: str):
+
+        self.session.add_user_message(user_message)
+
+        stream = self.client.chat.completions.create(
+
+            model=MODEL_NAME,
+
+            messages=self.session.history(),
+
+            temperature=TEMPERATURE,
+
+            max_tokens=MAX_TOKENS,
+
+            stream=True
+        )
+
+        full_response = ""
+
+        for chunk in stream:
+
+            delta = chunk.choices[0].delta.content
+
+            if delta:
+
+                full_response += delta
+
+                yield delta
+
+        self.session.add_assistant_message(full_response)
+
+
     def reset(self):
         self.session.clear()
