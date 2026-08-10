@@ -5,6 +5,7 @@ const socket = io();
 const sendButton = document.getElementById("send");
 const messageBox = document.getElementById("message");
 const chat = document.getElementById("chat");
+const MAX_HEIGHT = 180;
 let currentAssistantMessage = null;
 
 socket.on("connect", () => {
@@ -28,6 +29,17 @@ function addMessage(sender, message, type) {
     return div;
 }
 
+function autoResizeTextarea() {
+
+    messageBox.style.height = "auto";
+
+    messageBox.style.height =
+        Math.min(messageBox.scrollHeight, MAX_HEIGHT) + "px";
+
+}
+
+messageBox.addEventListener("input", autoResizeTextarea);
+
 sendButton.addEventListener("click", () => {
 
     const message = messageBox.value.trim();
@@ -46,14 +58,20 @@ sendButton.addEventListener("click", () => {
     });
 
     messageBox.value = "";
+    
+    autoResizeTextarea();
 
     messageBox.focus();
 });
 
 messageBox.addEventListener("keydown", (event) => {
 
-    if(event.key === "Enter"){
+    if(event.key === "Enter" && !event.shiftKey){
+
+        event.preventDefault();
+
         sendButton.click();
+
     }
 
 });

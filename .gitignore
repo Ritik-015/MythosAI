@@ -79,3 +79,5 @@ build/
 
 # Local databases (if you create one later)
 *.db
+
+node_modules/

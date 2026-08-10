@@ -1,43 +1,227 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Mythos AI</title>
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Design System -->
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/variables.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
+
+    <!-- Components -->
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sidebar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/input.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/welcome.css') }}">
+
+    <!-- Temporary -->
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
 </head>
 
 <body>
 
-<div class="container">
+<div class="app">
 
-    <header>
+    <!-- ========================= -->
+    <!-- Sidebar -->
+    <!-- ========================= -->
 
-        <h1>Mythos AI</h1>
+   <aside class="sidebar">
 
-    </header>
+    <div class="sidebar-header">
 
-    <main id="chat"></main>
+        <div class="logo">
 
-    <footer>
+            <div class="logo-circle">
 
-        <input
-            id="message"
-            placeholder="Ask Mythos anything..."
-        >
+                <div class="orb-core"></div>
 
-        <button id="send">
+            </div>
 
-            ➜
+            <div class="logo-text">
+
+                <h2>Mythos AI</h2>
+
+                <p>Intelligence. Reimagined.</p>
+
+            </div>
+
+        </div>
+
+        <button class="new-chat">
+
+            + New Chat
 
         </button>
 
-    </footer>
+    </div>
+
+    <div class="sidebar-history">
+
+        <h4>Today</h4>
+
+        <div class="history-item active">
+
+            Python Project
+
+        </div>
+
+        <div class="history-item">
+
+            Flask Debugging
+
+        </div>
+
+        <h4>Yesterday</h4>
+
+        <div class="history-item">
+
+            Voice Notes
+
+        </div>
+
+    </div>
+
+    <div class="sidebar-footer">
+
+        <button class="settings-btn">
+
+            ⚙ Settings
+
+        </button>
+
+    </div>
+
+</aside>
+
+    <!-- ========================= -->
+    <!-- Workspace -->
+    <!-- ========================= -->
+
+    <section class="workspace">
+
+        <!-- Header -->
+
+        <header class="workspace-header">
+
+            <div class="title">
+                <h1>                
+                Mythos AI
+                </h1>
+
+                <p>
+                    Your Intelligent Workspace
+                </p>
+            </div>
+
+            <div class="status">
+
+                Ready
+
+            </div>
+
+        </header>
+
+        <!-- Welcome -->
+
+        <<section class="welcome-screen" id="welcome">
+
+    <div class="welcome-logo">
+
+        <div class="welcome-orb">
+
+            <div class="orb-core large"></div>
+
+        </div>
+
+    </div>
+
+    <h1>
+
+        Welcome Back
+
+    </h1>
+
+    <p>
+
+        What would you like to explore today?
+
+    </p>
+
+    <div class="suggestions">
+
+        <button class="suggestion-card">
+
+            💻 Explain Python decorators
+
+        </button>
+
+        <button class="suggestion-card">
+
+            📄 Summarize a PDF
+
+        </button>
+
+        <button class="suggestion-card">
+
+            🎤 Start Voice Conversation
+
+        </button>
+
+        </div>
+
+    </section>
+        <!-- Chat -->
+
+        <main
+            id="chat"
+            class="chat-container">
+
+        </main>
+
+        <!-- Composer -->
+
+        <footer class="composer">
+
+    <button class="tool-btn" id="attach-btn">
+        📎
+    </button>
+
+    <button class="tool-btn" id="search-btn">
+        🌐
+    </button>
+
+    <textarea
+        id="message"
+        rows="1"
+        placeholder="Ask Mythos anything..."
+    ></textarea>
+
+    <button class="tool-btn" id="voice-btn">
+        🎤
+    </button>
+
+    <button id="send">
+        ➜
+    </button>
+
+</footer>
+
+    </section>
 
 </div>
 
@@ -46,4 +230,5 @@
 <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 
 </body>
+
 </html>

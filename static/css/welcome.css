@@ -1,0 +1,103 @@
+/* ==========================================
+   WELCOME SCREEN
+========================================== */
+
+.welcome-screen{
+
+    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:20px;
+
+    text-align:center;
+
+}
+
+.welcome-orb{
+
+    width:110px;
+
+    height:110px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:rgba(79,140,255,.08);
+
+    border:1px solid rgba(79,140,255,.12);
+
+}
+
+.orb-core.large{
+
+    width:42px;
+
+    height:42px;
+
+}
+
+.welcome-screen h1{
+
+    font-size:36px;
+
+    font-weight:600;
+
+}
+
+.welcome-screen p{
+
+    color:var(--text-muted);
+
+    font-size:18px;
+
+}
+
+.suggestions{
+
+    margin-top:30px;
+
+    display:flex;
+
+    gap:18px;
+
+}
+
+.suggestion-card{
+
+    width:220px;
+
+    padding:18px;
+
+    border:none;
+
+    border-radius:var(--radius-md);
+
+    background:var(--bg-card);
+
+    color:var(--text-primary);
+
+    cursor:pointer;
+
+    transition:var(--transition);
+
+}
+
+.suggestion-card:hover{
+
+    transform:translateY(-5px);
+
+    background:var(--bg-hover);
+
+}
