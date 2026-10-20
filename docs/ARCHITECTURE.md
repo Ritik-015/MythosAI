@@ -53,3 +53,8 @@ DuckDuckGo Instant Answers is a limited topic/summary endpoint, not a general we
 3. Ground optional AI search summaries in retrieved result metadata and produce citations.
 4. Add a local document index and search corpus only after file permissions, inclusion/exclusion rules and deletion behavior are designed.
 5. Integrate voice recognition/synthesis as replaceable services driven by actual application state.
+
+
+## Source-grounded research workflow
+
+`POST /api/research` runs the selected search provider first. If no usable results are returned, it does not ask the model to invent an answer. Otherwise, it sends the question and up to eight normalized result titles, URLs, and snippets to the configured LM Studio-compatible endpoint via `LLMClient.answer_with_sources`. This call is stateless and does not append the research material to the ordinary chat session. The prompt labels search records as untrusted, requires inline numeric citations, and asks the model to state when the provided snippets do not support an answer. The response includes the exact source records so the UI can display matching numbered links. The workflow uses search snippets only; it does not crawl/fetch full pages or validate claims independently.

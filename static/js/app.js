@@ -16,6 +16,12 @@ const searchProvider = document.getElementById("search-provider");
 const searchStatus = document.getElementById("search-status");
 const searchResults = document.getElementById("search-results");
 const searchSubmit = document.getElementById("search-submit");
+const researchSubmit = document.getElementById("research-submit");
+const researchAnswer = document.getElementById("research-answer");
+const researchMeta = document.getElementById("research-meta");
+const researchAnswerContent = document.getElementById("research-answer-content");
+const researchSources = document.getElementById("research-sources");
+const researchNotice = document.getElementById("research-notice");
 const newChatButton = document.querySelector(".new-chat");
 const MAX_HEIGHT = 180;
 const MAX_QUERY_CHARS = 500;
@@ -25,6 +31,7 @@ let isThinking = false;
 let isGenerating = false;
 let lastStreamFailed = false;
 let activeSearchController = null;
+let activeResearchController = null;
 
 function setStatus(message, state = "ready") {
     if (!statusBadge) return;
@@ -33,6 +40,8 @@ function setStatus(message, state = "ready") {
 }
 
 function startConversation() {
+    // Keep chat as a workspace destination without removing the new Files view.
+    window.MythosWorkspace?.activateView("chat");
     if (welcomeScreen) welcomeScreen.style.display = "none";
     if (chat) chat.style.display = "block";
 }
@@ -237,6 +246,10 @@ function closeSearch() {
         activeSearchController.abort();
         activeSearchController = null;
     }
+    if (activeResearchController) {
+        activeResearchController.abort();
+        activeResearchController = null;
+    }
     if (searchDialog?.open && typeof searchDialog.close === "function") searchDialog.close();
     else searchDialog?.removeAttribute("open");
 }
@@ -274,6 +287,11 @@ function renderSearchResults(results) {
 }
 
 async function executeSearch() {
+    if (activeResearchController) {
+        activeResearchController.abort();
+        activeResearchController = null;
+    }
+    if (researchAnswer) researchAnswer.hidden = true;
     const query = (searchInput?.value || "").trim();
     if (!query) {
         searchStatus.textContent = "Enter a search query.";
@@ -323,6 +341,136 @@ async function executeSearch() {
     }
 }
 
+function renderResearchSources(sources) {
+    researchSources?.replaceChildren();
+    if (!researchSources) return;
+
+    (Array.isArray(sources) ? sources : []).forEach((source, index) => {
+        const url = safeWebUrl(source?.url);
+        if (!url) return;
+
+        const item = document.createElement("li");
+        item.className = "research-source";
+        const heading = document.createElement("div");
+        heading.className = "research-source-heading";
+        const reference = document.createElement("span");
+        reference.className = "research-source-reference";
+        reference.textContent = `[${Number.isInteger(source.reference) ? source.reference : index + 1}]`;
+
+        const title = document.createElement("a");
+        title.href = url;
+        title.target = "_blank";
+        title.rel = "noopener noreferrer";
+        title.textContent = source.title || new URL(url).hostname;
+        heading.append(reference, title);
+
+        const host = document.createElement("div");
+        host.className = "research-source-url";
+        host.textContent = `${new URL(url).hostname}${source.source ? ` · ${source.source}` : ""}`;
+
+        const snippet = document.createElement("p");
+        snippet.className = "research-source-snippet";
+        snippet.textContent = source.snippet || "The provider returned no snippet for this source.";
+        item.append(heading, host, snippet);
+        researchSources.appendChild(item);
+    });
+}
+
+async function executeResearch() {
+    const query = (searchInput?.value || "").trim();
+    if (!query) {
+        searchStatus.textContent = "Enter a research question.";
+        searchInput?.focus();
+        return;
+    }
+    if (query.length > MAX_QUERY_CHARS) {
+        searchStatus.textContent = `Keep the question to ${MAX_QUERY_CHARS} characters or fewer.`;
+        return;
+    }
+
+    if (activeSearchController) {
+        activeSearchController.abort();
+        activeSearchController = null;
+    }
+    if (activeResearchController) activeResearchController.abort();
+    const controller = new AbortController();
+    activeResearchController = controller;
+
+    if (researchAnswer) researchAnswer.hidden = false;
+    if (researchAnswerContent) {
+        researchAnswerContent.textContent = "Searching the selected provider, then asking your configured LM Studio model to answer from the retrieved evidence…";
+    }
+    if (researchMeta) researchMeta.textContent = "This can take a little longer than a normal search.";
+    if (researchSources) researchSources.replaceChildren();
+    if (researchNotice) {
+        researchNotice.hidden = true;
+        researchNotice.textContent = "";
+    }
+    if (searchResults) searchResults.replaceChildren();
+    if (researchSubmit) researchSubmit.disabled = true;
+    if (searchSubmit) searchSubmit.disabled = true;
+    if (searchStatus) searchStatus.textContent = "Researching with retrieved sources…";
+
+    try {
+        const response = await fetch("/api/research", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Accept": "application/json" },
+            body: JSON.stringify({ query, provider: searchProvider?.value || "auto" }),
+            signal: controller.signal,
+        });
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) {
+            const error = new Error(payload.error || `Research failed (HTTP ${response.status}).`);
+            error.sources = payload.sources;
+            throw error;
+        }
+
+        if (payload.answer_status === "no_results" || !Array.isArray(payload.sources) || payload.sources.length === 0) {
+            if (researchAnswerContent) {
+                researchAnswerContent.textContent = "No usable search results were returned, so Mythos did not ask the model to generate an answer without source evidence.";
+            }
+            if (researchMeta) researchMeta.textContent = `Search provider: ${payload.provider || "selected provider"}`;
+            searchStatus.textContent = "No usable sources found.";
+        } else {
+            if (researchAnswerContent) {
+                researchAnswerContent.dataset.raw = String(payload.answer || "");
+                renderAssistantMarkdown(researchAnswerContent, researchAnswerContent.dataset.raw);
+            }
+            renderResearchSources(payload.sources);
+            const locationLabel = payload.local_inference === true
+                ? "local endpoint"
+                : payload.local_inference === false ? "remote endpoint" : "configured endpoint";
+            if (researchMeta) {
+                researchMeta.textContent = `${payload.model || "LM Studio model"} · ${locationLabel} · ${payload.provider || "search provider"}`;
+            }
+            searchStatus.textContent = `Research answer ready · ${payload.sources.length} cited source${payload.sources.length === 1 ? "" : "s"}`;
+        }
+
+        if (payload.notice && researchNotice) {
+            researchNotice.textContent = payload.notice;
+            researchNotice.hidden = false;
+        }
+        setStatus(payload.local_inference === false ? "Research used remote endpoint" : "Research complete", payload.local_inference === false ? "warning" : "ready");
+    } catch (error) {
+        if (error.name === "AbortError") return;
+        if (researchAnswerContent) {
+            researchAnswerContent.textContent = error.message || "Research failed. Check search provider and LM Studio settings.";
+        }
+        if (error.sources) renderResearchSources(error.sources);
+        if (researchMeta) researchMeta.textContent = "The answer was not completed.";
+        if (researchNotice) {
+            researchNotice.textContent = "No generated answer is shown as verified when the research request fails.";
+            researchNotice.hidden = false;
+        }
+        searchStatus.textContent = error.message || "Research failed.";
+        setStatus("Research failed", "error");
+    } finally {
+        if (activeResearchController === controller) activeResearchController = null;
+        if (researchSubmit) researchSubmit.disabled = false;
+        if (searchSubmit) searchSubmit.disabled = false;
+    }
+}
+
 function sendMessage(messageOverride = null) {
     if (isGenerating) return;
     const message = (messageOverride ?? messageBox?.value ?? "").trim();
@@ -358,12 +506,15 @@ searchForm?.addEventListener("submit", (event) => {
     event.preventDefault();
     executeSearch();
 });
+researchSubmit?.addEventListener("click", executeResearch);
 searchDialog?.addEventListener("close", () => {
     if (activeSearchController) activeSearchController.abort();
+    if (activeResearchController) activeResearchController.abort();
 });
 
 newChatButton?.addEventListener("click", () => {
     if (isGenerating) return;
+    window.MythosWorkspace?.activateView("chat");
     socket.emit("reset_chat");
     chat.replaceChildren();
     chat.style.display = "none";

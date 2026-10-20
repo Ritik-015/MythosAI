@@ -229,10 +229,20 @@
                 <input id="search-query" name="query" type="search" maxlength="500" placeholder="Search the web…" autocomplete="off" required>
                 <select id="search-provider" name="provider" aria-label="Search provider"><option value="auto">Automatic</option><option value="searxng">SearXNG</option><option value="duckduckgo_ia">DuckDuckGo Instant Answers</option></select>
                 <button id="search-submit" type="submit">Search</button>
+                <button id="research-submit" type="button">Research with AI</button>
             </div>
         </form>
-        <p class="search-privacy-note">Privacy: the query is sent to the selected search provider. Configure your own SearXNG instance in <code>.env</code> to use your chosen metasearch engines.</p>
+        <p class="search-privacy-note">Search queries go to the selected search provider. Research with AI also sends retrieved titles/snippets and your question to the configured LM Studio endpoint (local by default). If your endpoint is remote, that content leaves this computer.</p>
         <p id="search-status" class="search-status" role="status" aria-live="polite">Enter a query to search.</p>
+        <section id="research-answer" class="research-answer" aria-labelledby="research-answer-title" aria-live="polite" hidden>
+            <div class="research-answer-header">
+                <div><p class="search-eyebrow">MYTHOS / GROUNDED RESEARCH</p><h3 id="research-answer-title">Research answer</h3><p id="research-meta" class="research-meta"></p></div>
+            </div>
+            <div id="research-answer-content" class="research-answer-content"></div>
+            <div class="research-sources-heading">Sources used</div>
+            <ol id="research-sources" class="research-sources"></ol>
+            <p id="research-notice" class="research-notice" hidden></p>
+        </section>
         <div id="search-results" class="search-results" role="region" aria-label="Search results"></div>
     </div>
 </dialog>

@@ -26,6 +26,7 @@ from config import (
 )
 from core.logger import logger
 from core.session import ChatSession
+from core.research import build_research_messages
 
 
 class LLMServiceError(RuntimeError):
@@ -115,6 +116,58 @@ class LLMClient:
             )
         self._model_id = str(models[0].id)
         return self._model_id
+
+    def answer_with_sources(self, question: str, sources: list[dict]) -> dict:
+        """Generate a non-streaming answer grounded in retrieved source snippets.
+
+        This is intentionally stateless: research prompts and source snippets do
+        not get appended to the user's ordinary chat history.
+        """
+        try:
+            messages, normalized_sources = build_research_messages(question, sources)
+        except ValueError as exc:
+            raise LLMServiceError(str(exc)) from None
+
+        with self._request_lock:
+            model = self._resolve_model()
+            try:
+                response = self.client.chat.completions.create(
+                    model=model,
+                    messages=messages,
+                    temperature=TEMPERATURE,
+                    max_tokens=MAX_TOKENS,
+                    stream=False,
+                )
+            except (APIConnectionError, APITimeoutError):
+                raise LLMServiceError(
+                    "Could not connect to LM Studio. Confirm that its local server is running."
+                ) from None
+            except APIStatusError as exc:
+                if exc.status_code == 404:
+                    raise LLMServiceError(
+                        "The configured model was not found. Load it in LM Studio or clear MODEL_NAME to auto-detect a model."
+                    ) from None
+                raise LLMServiceError(
+                    f"LM Studio returned HTTP {exc.status_code} during research. Check the model and server logs."
+                ) from None
+            except OpenAIError:
+                raise LLMServiceError(
+                    "LM Studio rejected the research request. Check model compatibility and generation settings."
+                ) from None
+
+        choices = getattr(response, "choices", None) or []
+        answer = getattr(getattr(choices[0], "message", None), "content", "") if choices else ""
+        if not isinstance(answer, str) or not answer.strip():
+            raise LLMServiceError(
+                "LM Studio returned an empty research answer. Try a shorter question or a model with a larger context window."
+            )
+
+        return {
+            "answer": answer.strip(),
+            "model": getattr(response, "model", None) or model,
+            "local": _is_loopback_endpoint(LM_STUDIO_BASE_URL),
+            "sources": normalized_sources,
+        }
 
     def chat(self, user_message: str) -> str:
         return "".join(self.stream_chat(user_message))
