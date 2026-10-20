@@ -1,0 +1,247 @@
+/* ==========================================
+   CHAT CONTAINER
+========================================== */
+
+.chat-container{
+
+    display:none;
+
+    position:absolute;
+
+    inset:0;
+
+    overflow-y:auto;
+
+    padding:35px;
+
+}
+
+/* ==========================================
+   MESSAGE
+========================================== */
+
+.message{
+
+    display:flex;
+
+    margin-bottom:22px;
+
+    animation:fadeIn .25s ease;
+
+}
+
+/* ==========================================
+   USER
+========================================== */
+
+.message.user{
+
+    justify-content:flex-end;
+
+}
+
+/* ==========================================
+   ASSISTANT
+========================================== */
+
+.message.assistant{
+
+    justify-content:flex-start;
+
+}
+
+/* ==========================================
+   BODY
+========================================== */
+
+.message-body{
+
+    max-width:75%;
+
+}
+
+/* ==========================================
+   CONTENT
+========================================== */
+
+.content{
+
+    padding:16px 20px;
+
+    border-radius:20px;
+
+    line-height:1.75;
+
+    font-size:15px;
+
+    white-space:pre-wrap;
+
+    word-break:break-word;
+
+}
+
+/* ==========================================
+   USER BUBBLE
+========================================== */
+
+.user .content{
+
+    background:linear-gradient(
+        135deg,
+        #2563EB,
+        #1D4ED8
+    );
+
+    color:white;
+
+    border-bottom-right-radius:6px;
+
+    box-shadow:0 8px 18px rgba(37,99,235,.25);
+
+}
+
+/* ==========================================
+   ASSISTANT BUBBLE
+========================================== */
+
+.assistant .content{
+
+    background:var(--bg-card);
+
+    color:var(--text-primary);
+
+    border:1px solid var(--border);
+
+    border-bottom-left-radius:6px;
+
+}
+
+/* ==========================================
+   CODE BLOCK
+========================================== */
+
+.content pre {
+
+    margin:16px 0;
+
+    border-radius:12px;
+
+    overflow:auto;
+
+    font-size:14px;
+
+}
+
+.content code {
+
+    font-family:
+        "JetBrains Mono",
+        "Fira Code",
+        Consolas,
+        monospace;
+
+    font-size:14px;
+
+}
+
+.content :not(pre) > code {
+
+    background:#1E293B;
+
+    padding:2px 6px;
+
+    border-radius:6px;
+
+    color:#7DD3FC;
+
+}
+
+/* ==========================================
+   CODE WRAPPER
+========================================== */
+
+.code-wrapper{
+
+    margin:20px 0;
+
+    border-radius:14px;
+
+    overflow:hidden;
+
+    border:1px solid var(--border);
+
+    background:#0B1220;
+
+}
+
+/* ==========================================
+   TOOLBAR
+========================================== */
+
+.code-toolbar{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:10px 14px;
+
+    background:#111827;
+
+    border-bottom:1px solid var(--border);
+
+}
+
+/* ==========================================
+   LANGUAGE
+========================================== */
+
+.code-language{
+
+    font-size:13px;
+
+    color:#94A3B8;
+
+    font-weight:600;
+
+}
+
+/* ==========================================
+   COPY BUTTON
+========================================== */
+
+.copy-btn{
+
+    border:none;
+
+    background:transparent;
+
+    color:#CBD5E1;
+
+    cursor:pointer;
+
+    font-size:13px;
+
+    transition:.2s;
+
+}
+
+.copy-btn:hover{
+
+    color:white;
+
+}
+
+/* ==========================================
+   CODE BLOCK
+========================================== */
+
+.code-wrapper pre{
+
+    margin:0 !important;
+
+    border-radius:0 !important;
+
+}

@@ -1,0 +1,32 @@
+MythosAI/
+├── app.py
+├── config.py
+├── requirements.txt
+├── core/
+│   ├── llm.py
+│   ├── logger.py
+│   ├── memory.py
+│   ├── prompts.py
+│   ├── session.py
+│   └── streaming.py
+├── routes/
+│   ├── socket_events.py
+│   └── web.py
+├── tools/
+│   ├── search.py
+│   ├── code_analyzer.py
+│   ├── pdf_reader.py
+│   └── zip_reader.py
+├── voice/
+│   ├── recorder.py
+│   ├── tts.py
+│   ├── vad.py
+│   └── whisper.py
+├── templates/
+│   └── index.html
+├── static/
+│   ├── css/
+│   ├── js/
+│   └── vendor/
+├── tests/
+└── docs/

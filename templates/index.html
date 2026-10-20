@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b0e18">
+    <title>Mythos AI — Workspace</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/variables.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sidebar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/welcome.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/input.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/glass.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/workspace.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+<div class="app app-shell" id="app-shell" data-view="files">
+    <aside class="sidebar" aria-label="Primary navigation">
+        <div class="sidebar-header">
+            <a class="logo brand-link" href="#files" id="brand-home" aria-label="Mythos AI workspace home">
+                <span class="logo-circle"><span class="orb-core"></span></span>
+                <span class="logo-text">
+                    <h2>MYTHOS<span class="brand-dot">.</span></h2>
+                    <p>INTELLIGENCE, REIMAGINED</p>
+                </span>
+            </a>
+            <div class="workspace-switcher">
+                <span class="workspace-switcher-icon">M</span>
+                <span class="workspace-switcher-copy"><strong>Personal workspace</strong><small>Local environment</small></span>
+                <span class="switcher-chevron" aria-hidden="true">⌄</span>
+            </div>
+            <button class="new-chat" type="button">＋&nbsp; New chat</button>
+        </div>
+
+        <nav class="sidebar-navigation">
+            <p class="nav-section-label">WORKSPACE</p>
+            <button class="nav-item active" type="button" data-view="files" aria-current="page">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 7.5h6l2 2h9v9a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/><path d="M3.5 7.5v-2a2 2 0 0 1 2-2h4l2 2h5"/></svg><span>My Files</span><span class="nav-count" id="nav-file-count">0</span>
+            </button>
+            <button class="nav-item" type="button" data-view="recent">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg><span>Recent</span>
+            </button>
+            <button class="nav-item" type="button" data-view="shared" title="Sharing is not enabled in this local-first prototype">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.2 10.9 7.5-4.7M8.2 13.1l7.5 4.7"/></svg><span>Shared</span>
+            </button>
+            <button class="nav-item" type="button" data-view="starred">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.8 6.4.9-4.6 4.5 1.1 6.3-5.7-3-5.7 3 1.1-6.3-4.6-4.5 6.4-.9z"/></svg><span>Starred</span>
+            </button>
+            <button class="nav-item" type="button" data-view="trash">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3m-9 0 1 13h10l1-13M10 11v5m4-5v5"/></svg><span>Trash</span>
+            </button>
+
+            <div class="nav-divider"></div>
+            <p class="nav-section-label">MYTHOS</p>
+            <button class="nav-item" type="button" data-view="chat" id="nav-chat">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H7l-4 2 1.5-4.4A7.5 7.5 0 1 1 20 11.5Z"/><path d="M8 11h8M8 8h5"/></svg><span>AI Chat</span><span class="nav-live-dot" aria-hidden="true"></span>
+            </button>
+            <button class="nav-item" type="button" id="nav-web-search">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="7"/><path d="m16 16 4.5 4.5M4.5 10.8h12.6M10.8 3.8a11 11 0 0 1 0 14M10.8 3.8a11 11 0 0 0 0 14"/></svg><span>Web Search</span>
+            </button>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="local-card">
+                <div class="local-card-top"><span class="local-card-icon">⌂</span><span class="local-pill"><i></i> LOCAL</span></div>
+                <strong>Your files stay yours.</strong>
+                <p>Imported items are stored in this browser on this device. Mythos does not upload them automatically.</p>
+                <div class="local-card-meta"><span id="storage-item-count">0 items</span><span id="storage-total-size">0 B</span></div>
+            </div>
+            <button class="sidebar-profile" type="button" id="local-info-button" aria-label="Local workspace information">
+                <span class="profile-avatar">MY</span><span class="profile-copy"><strong>Local workspace</strong><small>Private session</small></span><span class="profile-more">···</span>
+            </button>
+        </div>
+    </aside>
+
+    <main class="workspace" aria-label="Main workspace">
+        <header class="workspace-header">
+            <div class="breadcrumb" aria-label="Breadcrumb">
+                <button type="button" id="breadcrumb-home" class="breadcrumb-home">Workspace</button>
+                <span class="breadcrumb-slash">/</span>
+                <span id="breadcrumb-current">My Files</span>
+            </div>
+            <div class="header-actions">
+                <button class="header-search-button" id="global-search-btn" type="button" aria-label="Open web search"><span>⌕</span><span>Search the web</span><kbd>Ctrl K</kbd></button>
+                <span class="status" data-state="busy" role="status" aria-live="polite">Checking services…</span>
+                <span class="header-avatar" aria-hidden="true">M</span>
+            </div>
+        </header>
+
+        <div class="workspace-content">
+            <section id="file-view" class="file-view" aria-label="My files">
+                <div class="page-heading-row">
+                    <div>
+                        <p class="page-eyebrow">YOUR PRIVATE SPACE</p>
+                        <h1 id="file-page-title">My Files</h1>
+                        <p class="page-subtitle" id="file-page-subtitle">Everything you bring into Mythos, thoughtfully organized.</p>
+                    </div>
+                    <div class="page-actions">
+                        <button type="button" class="button-secondary" id="new-folder-btn"><span aria-hidden="true">＋</span> New folder</button>
+                        <button type="button" class="button-primary" id="upload-files-btn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m-4 4 4-4 4 4M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg> Upload files</button>
+                        <input type="file" id="file-picker" multiple hidden>
+                    </div>
+                </div>
+
+                <div class="file-toolbar">
+                    <label class="file-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="7"/><path d="m16 16 4.5 4.5"/></svg><input type="search" id="file-filter" placeholder="Search your workspace…" autocomplete="off" aria-label="Search your workspace"><kbd>/</kbd></label>
+                    <div class="file-toolbar-actions">
+                        <label class="sort-control"><span>Sort:</span><select id="file-sort" aria-label="Sort files"><option value="updated">Recently added</option><option value="name">Name A–Z</option><option value="size">File size</option></select></label>
+                        <div class="view-toggle" role="group" aria-label="File layout">
+                            <button type="button" class="view-toggle-btn active" data-layout="list" aria-pressed="true" aria-label="List view"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg></button>
+                            <button type="button" class="view-toggle-btn" data-layout="grid" aria-pressed="false" aria-label="Grid view"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-row" role="group" aria-label="Filter files">
+                    <button type="button" class="filter-chip active" data-file-filter="all" aria-pressed="true">All files <span id="all-file-count">0</span></button>
+                    <button type="button" class="filter-chip" data-file-filter="documents" aria-pressed="false">Documents</button>
+                    <button type="button" class="filter-chip" data-file-filter="images" aria-pressed="false">Images</button>
+                    <button type="button" class="filter-chip" data-file-filter="code" aria-pressed="false">Code</button>
+                    <button type="button" class="filter-chip" data-file-filter="archives" aria-pressed="false">Archives</button>
+                </div>
+
+                <section class="folder-section" aria-labelledby="folders-title">
+                    <div class="section-heading">
+                        <div><h2 id="folders-title">Folders</h2><span class="section-hint">Your workspace collections</span></div>
+                        <button type="button" class="text-button" id="manage-folders-btn">＋ Create folder</button>
+                    </div>
+                    <div id="folder-grid" class="folder-grid"></div>
+                </section>
+
+                <section class="files-section" aria-labelledby="files-title">
+                    <div class="section-heading files-heading">
+                        <div><h2 id="files-title">Files</h2><span class="section-hint" id="files-subheading">Items imported into this browser</span></div>
+                        <span class="result-count" id="files-result-count">0 items</span>
+                    </div>
+                    <div class="file-table-wrap" id="file-table-wrap">
+                        <div class="file-table-header" aria-hidden="true"><span>Name</span><span>Type</span><span>Added</span><span>Size</span><span></span></div>
+                        <div id="file-rows" class="file-rows"></div>
+                    </div>
+                    <div class="file-empty" id="file-empty">
+                        <div class="empty-file-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5h8l4 4V20a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1Z"/><path d="M14 3.5v5h4M8 13h8M8 16.5h6"/></svg></div>
+                        <h3 id="empty-title">Your workspace is ready</h3>
+                        <p id="empty-description">Upload files to see them here. They stay in this browser on this device until you remove them.</p>
+                        <button type="button" class="button-secondary" id="empty-upload-btn">＋ Import your first files</button>
+                    </div>
+                </section>
+                <div class="drop-overlay" id="drop-overlay" aria-hidden="true"><div><span>＋</span><strong>Drop files into Mythos</strong><small>Files are stored locally in this browser.</small></div></div>
+            </section>
+
+            <section id="chat-view" class="chat-view" aria-label="AI chat" hidden>
+                <section id="welcome" class="welcome-screen">
+                    <div class="welcome-orb"><div class="orb-core large"></div></div>
+                    <h1>Welcome Back</h1>
+                    <p>Your local intelligence is ready when you are.</p>
+                    <div class="suggestions">
+                        <button class="suggestion-card" type="button">💻 Continue MythosAI</button>
+                        <button class="suggestion-card" type="button">📄 Analyze Documents</button>
+                        <button class="suggestion-card" type="button">🌐 Research Anything</button>
+                        <button class="suggestion-card" type="button">🎤 Start Voice Mode</button>
+                    </div>
+                </section>
+                <section id="chat" class="chat-container" aria-live="polite" aria-label="Conversation"></section>
+            </section>
+        </div>
+
+        <footer class="composer" id="chat-composer">
+            <button class="tool-btn" id="attach-btn" type="button" disabled title="Attachments are not implemented yet" aria-label="Attachments not available">📎</button>
+            <button class="tool-btn" id="search-btn" type="button" title="Search the web" aria-label="Search the web">🌐</button>
+            <textarea id="message" rows="1" placeholder="Ask Mythos anything…" aria-label="Message Mythos"></textarea>
+            <button class="tool-btn" id="voice-btn" type="button" disabled title="Voice interaction is not integrated yet" aria-label="Voice unavailable">🎤</button>
+            <button id="send" type="button" title="Send message" aria-label="Send message">➜</button>
+        </footer>
+    </main>
+
+    <aside class="inspector-panel" id="inspector-panel" aria-label="Selected file details">
+        <div class="inspector-heading"><div><p class="panel-eyebrow">WORKSPACE</p><h2>Details</h2></div><button type="button" class="inspector-more" id="inspector-close-selection" aria-label="Clear selected file">×</button></div>
+        <div id="inspector-empty" class="inspector-empty">
+            <div class="preview-illustration"><div class="preview-illustration-glow"></div><div class="preview-doc"><span></span><span></span><span></span></div><div class="preview-spark spark-one">✦</div><div class="preview-spark spark-two">·</div></div>
+            <h3>Select a file</h3><p>Choose an item from your workspace to see its details and preview.</p>
+        </div>
+        <div id="inspector-body" class="inspector-body" hidden>
+            <div class="inspector-preview" id="inspector-preview"></div>
+            <div class="inspector-file-heading"><div id="inspector-file-icon" class="file-type-icon"></div><div class="inspector-file-name-wrap"><h3 id="inspector-file-name"></h3><p id="inspector-file-subtitle"></p></div></div>
+            <div class="inspector-actions">
+                <button type="button" id="inspector-download" class="inspector-action"><span>↓</span> Download</button>
+                <button type="button" id="inspector-star" class="inspector-action"><span>☆</span> Star</button>
+                <button type="button" id="inspector-trash" class="inspector-action danger"><span>⌫</span> Move to trash</button>
+                <button type="button" id="inspector-restore" class="inspector-action" hidden><span>↶</span> Restore</button>
+                <button type="button" id="inspector-delete" class="inspector-action danger" hidden><span>×</span> Delete permanently</button>
+            </div>
+            <div class="inspector-divider"></div>
+            <div class="detail-section"><h4>File information</h4><div class="detail-row"><span>Kind</span><strong id="detail-kind">—</strong></div><div class="detail-row"><span>File size</span><strong id="detail-size">—</strong></div><div class="detail-row"><span>Added</span><strong id="detail-added">—</strong></div><div class="detail-row"><span>Folder</span><select id="detail-folder-select" aria-label="Move file to folder"></select></div></div>
+            <div class="inspector-divider"></div>
+            <div class="privacy-note"><span class="privacy-lock">♢</span><div><strong>Stored locally</strong><p>Imported file data stays in this browser. Mythos does not upload it automatically.</p></div></div>
+        </div>
+        <div class="inspector-footer"><span class="footer-status-dot"></span><span>MYTHOS LOCAL WORKSPACE</span><span class="footer-version">v0.1</span></div>
+    </aside>
+</div>
+
+<dialog id="folder-dialog" class="folder-dialog" aria-labelledby="folder-dialog-title">
+    <form id="folder-form">
+        <p class="panel-eyebrow">WORKSPACE COLLECTION</p>
+        <h2 id="folder-dialog-title">Create a folder</h2>
+        <p class="folder-dialog-copy">Organize imported files in a folder in your local workspace.</p>
+        <label for="folder-name">Folder name</label>
+        <input type="text" id="folder-name" name="folder-name" maxlength="60" placeholder="e.g. Research" required autocomplete="off">
+        <p id="folder-error" class="folder-error" role="status" aria-live="polite"></p>
+        <div class="folder-dialog-actions"><button type="button" class="button-secondary" id="cancel-folder-btn">Cancel</button><button type="submit" class="button-primary">Create folder</button></div>
+    </form>
+</dialog>
+
+<dialog id="search-dialog" class="search-dialog" aria-labelledby="search-title">
+    <div class="search-panel">
+        <div class="search-dialog-header">
+            <div><p class="search-eyebrow">MYTHOS / DISCOVERY</p><h2 id="search-title">Mythos Search</h2><p class="search-subtitle">Search results come from the selected provider; Mythos does not invent results.</p></div>
+            <button id="search-close" class="search-close" type="button" aria-label="Close search">×</button>
+        </div>
+        <form id="search-form" class="search-form">
+            <label for="search-query">What do you want to find?</label>
+            <div class="search-input-row">
+                <input id="search-query" name="query" type="search" maxlength="500" placeholder="Search the web…" autocomplete="off" required>
+                <select id="search-provider" name="provider" aria-label="Search provider"><option value="auto">Automatic</option><option value="searxng">SearXNG</option><option value="duckduckgo_ia">DuckDuckGo Instant Answers</option></select>
+                <button id="search-submit" type="submit">Search</button>
+            </div>
+        </form>
+        <p class="search-privacy-note">Privacy: the query is sent to the selected search provider. Configure your own SearXNG instance in <code>.env</code> to use your chosen metasearch engines.</p>
+        <p id="search-status" class="search-status" role="status" aria-live="polite">Enter a query to search.</p>
+        <div id="search-results" class="search-results" role="region" aria-label="Search results"></div>
+    </div>
+</dialog>
+
+<script src="{{ url_for('static', filename='vendor/socket.io.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/services/socketService.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-python.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-javascript.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-c.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-cpp.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-java.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-sql.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-bash.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-json.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+<script src="{{ url_for('static', filename='js/workspace.js') }}"></script>
+</body>
+</html>

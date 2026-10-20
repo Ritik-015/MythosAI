@@ -1,0 +1,99 @@
+/* ==========================================
+   WELCOME SCREEN
+========================================== */
+
+.welcome-screen{
+
+    position:absolute;
+
+    inset:0;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    text-align:center;
+
+    padding:40px;
+
+}
+
+/* ==========================================
+   TITLE
+========================================== */
+
+.welcome-screen h1{
+
+    margin-top:28px;
+
+    font-size:42px;
+
+    font-weight:700;
+
+    color:var(--text-primary);
+
+}
+
+.welcome-screen p{
+
+    margin-top:12px;
+
+    font-size:18px;
+
+    color:var(--text-muted);
+
+}
+
+/* ==========================================
+   SUGGESTION GRID
+========================================== */
+
+.suggestions{
+
+    margin-top:50px;
+
+    display:grid;
+
+    grid-template-columns:repeat(2,260px);
+
+    gap:20px;
+
+}
+
+/* ==========================================
+   CARD
+========================================== */
+
+.suggestion-card{
+
+    height:80px;
+
+    border:none;
+
+    border-radius:var(--radius-md);
+
+    background:var(--bg-card);
+
+    color:var(--text-primary);
+
+    font-size:16px;
+
+    cursor:pointer;
+
+    transition:var(--transition);
+
+}
+
+.suggestion-card:hover{
+
+    transform:translateY(-5px);
+
+    background:var(--bg-hover);
+
+    box-shadow:var(--shadow-glow);
+
+}

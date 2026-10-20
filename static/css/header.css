@@ -1,0 +1,105 @@
+/* ==========================================
+   WORKSPACE HEADER
+========================================== */
+
+.workspace-header{
+
+    height:80px;
+
+    flex-shrink:0;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:0 35px;
+
+    background:var(--bg-secondary);
+
+    border-bottom:1px solid var(--border);
+
+}
+
+/* ==========================================
+   TITLE
+========================================== */
+
+.title{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.title h1{
+
+    font-size:22px;
+
+    font-weight:600;
+
+    color:var(--text-primary);
+
+}
+
+.title p{
+
+    margin-top:4px;
+
+    font-size:13px;
+
+    color:var(--text-muted);
+
+}
+
+/* ==========================================
+   STATUS
+========================================== */
+
+.status{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:10px 18px;
+
+    border-radius:999px;
+
+    background:var(--bg-card);
+
+    border:1px solid var(--border);
+
+    color:var(--text-secondary);
+
+    font-size:14px;
+
+    font-weight:500;
+
+}
+
+/* ==========================================
+   STATUS DOT
+========================================== */
+
+.status::before{
+
+    content:"";
+
+    width:10px;
+
+    height:10px;
+
+    border-radius:50%;
+
+    background:#22C55E;
+
+    box-shadow:
+
+        0 0 12px #22C55E;
+
+}

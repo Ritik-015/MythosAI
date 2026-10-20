@@ -1,0 +1,81 @@
+/* ==========================================
+   APP LAYOUT
+========================================== */
+
+body{
+
+    width:100%;
+    height:100vh;
+
+    overflow:hidden;
+
+    display:flex;
+
+    background:var(--bg-primary);
+
+}
+
+.app{
+
+    width:100%;
+    height:100vh;
+
+    display:flex;
+
+}
+
+/* ==========================================
+   SIDEBAR
+========================================== */
+
+.sidebar{
+
+    width:280px;
+    min-width:280px;
+
+    height:100vh;
+
+    display:flex;
+    flex-direction:column;
+
+}
+
+/* ==========================================
+   WORKSPACE
+========================================== */
+
+.workspace{
+
+    flex:1;
+
+    height:100vh;
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+/* ==========================================
+   MAIN CONTENT
+========================================== */
+
+.workspace-content{
+
+    flex:1;
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+/* ==========================================
+   COMPOSER
+========================================== */
+
+.composer{
+
+    flex-shrink:0;
+
+}
